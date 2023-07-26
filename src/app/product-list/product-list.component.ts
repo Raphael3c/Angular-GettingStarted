@@ -1,14 +1,24 @@
-import { Component } from '@angular/core';
-
-import { products } from '../products';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { Product, products } from '../products';
 
 @Component({
   selector: 'app-product-list',
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.css'],
 })
-export class ProductListComponent {
+export class ProductListComponent implements OnInit {
+  product: Product | undefined;
   products = [...products];
+
+  constructor(private route: ActivatedRoute) {}
+
+  ngOnInit() {
+    const routeParams = this.route.snapshot.paramMap;
+    const productIdFromRoute = Number(routeParams.get('productId'));
+
+    this.product = products.find((product) => product.id == productIdFromRoute);
+  }
 
   share() {
     window.alert('The product has been shared!');
